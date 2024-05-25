@@ -42,6 +42,9 @@ public class ExcelExporter {
                 try {
                     Object value = field.get(rowData);
                     Cell cell = row.createCell(i);
+                    if (value == null) {
+                        continue;
+                    }
                     if (value instanceof String) {
                         cell.setCellValue((String) value);
                     } else if (value instanceof Integer) {

@@ -10,23 +10,23 @@ public record Empleado(
         String nombres,
         String apellidoPat,
         String apellidoMat,
-        int idDepartamento,
+        Integer idDepartamento,
         String departamento,
         String correo,
-        int edad,
+        Integer edad,
         double salario,
         Date fechaNacimiento
 ) implements Serializable {
 
     public Empleado(Integer id,String codigoEmpleado, String nombres, String apellidoPat, String apellidoMat, String departamento, String correo, int edad, double salario) {
-        this(id, codigoEmpleado, nombres, apellidoPat, apellidoMat, 0, departamento, correo, edad, salario, null);
+        this(id, codigoEmpleado, nombres, apellidoPat, apellidoMat, null, departamento, correo, edad, salario, null);
     }
     public Empleado(String codigoEmpleado, String nombres, String apellidoPat, String apellidoMat, String departamento, String correo, double salario, Date fechaNacimiento) {
-        this(null, codigoEmpleado, nombres, apellidoPat, apellidoMat, 0, departamento, correo, 0, salario, fechaNacimiento);
+        this(null, codigoEmpleado, nombres, apellidoPat, apellidoMat, null, departamento, correo, null, salario, fechaNacimiento);
     }
 
     public Empleado(String codigoEmpleado, String nombres, String apellidoPat, String apellidoMat, int idDepartamento, String correo, double salario, Date fechaNacimiento) {
-        this(null, codigoEmpleado, nombres, apellidoPat, apellidoMat, idDepartamento, null, correo, 0, salario, fechaNacimiento);
+        this(null, codigoEmpleado, nombres, apellidoPat, apellidoMat, idDepartamento, null, correo, null, salario, fechaNacimiento);
     }
 
     public static List<String> getHeaders() {
