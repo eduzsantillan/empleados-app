@@ -181,7 +181,6 @@
                     <table class="table">
                         <thead class="thead-dark">
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Código Empleado</th>
                             <th scope="col">Nombres</th>
                             <th scope="col">Apellido Paterno</th>
@@ -196,7 +195,6 @@
                         <tbody>
                         <c:forEach var="empleado" items="${empleados}">
                             <tr>
-                                <td>${empleado.id()}</td>
                                 <td>${empleado.codigoEmpleado()}</td>
                                 <td>${empleado.nombres()}</td>
                                 <td>${empleado.apellidoPat()}</td>
