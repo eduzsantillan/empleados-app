@@ -35,4 +35,6 @@ public class ParametroDao {
         logger.info(String.format("Se obtuvieron %d departamentos", departamentos.size()) );
         return departamentos;
     }
+
+
 }
