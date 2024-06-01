@@ -5,6 +5,7 @@ public enum Routes {
     ADMIN("/admin"),
     USUARIO("/usuario"),
     LOGIN("/login"),
+    NOTFOUND("/notfound"),
     LOGOUT("/logout");
 
     private final String route;
