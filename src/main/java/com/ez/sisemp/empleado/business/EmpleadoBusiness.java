@@ -7,6 +7,8 @@ import com.ez.sisemp.empleado.exception.EmailAlreadyInUseException;
 import com.ez.sisemp.empleado.exception.EmpleadosNotFoundException;
 import com.ez.sisemp.empleado.model.Empleado;
 import com.ez.sisemp.empleado.model.EmpleadoDashboard;
+import com.ez.sisemp.parametro.dao.ParametroDao;
+import com.ez.sisemp.shared.utils.EdadUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLException;
@@ -18,10 +20,12 @@ public class EmpleadoBusiness {
 
     private final EmpleadoDao empleadoDao;
     private final EmpleadoDashboardDao empleadoDashboardDao;
+    private final ParametroDao parametroDao;
 
     public EmpleadoBusiness(){
         this.empleadoDao = new EmpleadoDao();
         this.empleadoDashboardDao = new EmpleadoDashboardDao();
+        this.parametroDao = new ParametroDao();
     }
 
     public void registrarEmpleado(Empleado empleado) throws SQLException, ClassNotFoundException {
@@ -62,6 +66,7 @@ public class EmpleadoBusiness {
     }
 
     private Empleado mapToRecord(EmpleadoEntity e) {
+        var departamento = parametroDao.getById(e.getIdDepartamento());
         return new Empleado(
                 Math.toIntExact(e.getId()),
                 e.getCodigoEmpleado(),
@@ -69,14 +74,13 @@ public class EmpleadoBusiness {
                 e.getApellidoPat(),
                 e.getApellidoMat(),
                 e.getIdDepartamento(),
-                "TODO",
+                departamento.getNombre(),
                 e.getCorreo(),
-                0, // TODO
+                EdadUtils.calcularEdad(e.getFechaNacimiento()),
                 e.getSalario(),
                 e.getFechaNacimiento()
         );
     }
-
 
     public EmpleadoDashboard obtenerDatosDashboard() throws SQLException, ClassNotFoundException {
         return empleadoDashboardDao.get();
