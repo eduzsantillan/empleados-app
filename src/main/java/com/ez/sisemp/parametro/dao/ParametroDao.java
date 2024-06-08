@@ -1,8 +1,11 @@
 package com.ez.sisemp.parametro.dao;
 
+import com.ez.sisemp.parametro.entity.DepartamentoEntity;
 import com.ez.sisemp.parametro.exception.GetParametroException;
 import com.ez.sisemp.parametro.model.Departamento;
 import com.ez.sisemp.shared.config.MySQLConnection;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +17,12 @@ public class ParametroDao {
 
     private static final String SQL_SELECT_DEPARTAMENTOS = "SELECT id,codigo,nombre FROM departamentos";
     private final Logger logger = Logger.getLogger(ParametroDao.class.getName());
+    private final EntityManager entityManager;
+
+    public ParametroDao() {
+        var EntityManagerFactory = Persistence.createEntityManagerFactory("devUnit");
+        this.entityManager = EntityManagerFactory.createEntityManager();
+    }
 
     public List<Departamento> obtenerDepartamentos()  {
         logger.info("Obteniendo departamentos");
@@ -34,5 +43,9 @@ public class ParametroDao {
         }
         logger.info(String.format("Se obtuvieron %d departamentos", departamentos.size()) );
         return departamentos;
+    }
+
+    public DepartamentoEntity getById (Integer departamentoId) {
+        return entityManager.find(DepartamentoEntity.class, departamentoId);
     }
 }

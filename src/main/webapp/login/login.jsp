@@ -11,7 +11,7 @@
 <body>
     <div >
         <form class="login-form" action="../login" method="post">
-            <h2>Bienvenido</h2>
+            <h2>Bienvenido al sistema de empleados</h2>
             <c:if test="${not empty msj}">
                 <div class="alert alert-danger">
                         ${msj}

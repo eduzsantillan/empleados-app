@@ -9,7 +9,7 @@ public class MySQLConnection {
     private static Connection connection = null;
     private static final String URL = "jdbc:mysql://localhost:3306/sisemp";
     private static final String USER= "root";
-    private static final String PASSWORD = "develop2024";
+    private static final String PASSWORD = "";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private MySQLConnection() {

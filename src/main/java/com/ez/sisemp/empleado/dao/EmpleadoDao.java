@@ -1,7 +1,13 @@
 package com.ez.sisemp.empleado.dao;
 
+import com.ez.sisemp.empleado.entity.EmpleadoEntity;
 import com.ez.sisemp.empleado.model.Empleado;
 import com.ez.sisemp.shared.config.MySQLConnection;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +33,12 @@ public class EmpleadoDao{
     WHERE 
         e.activo = 1;
     """;
+
+    private static final String SQL_GET_ALL_EMPLEADOS_JPQL = """
+            Select  e
+            from EmpleadoEntity e
+            """;
+
     private static String SQL_UPDATE_EMPLEADO = "UPDATE empleado SET nombres = ?, apellido_pat = ?, apellido_mat = ?, id_departamento = ?, correo = ?, salario = ? WHERE id = ?;";
     private static String SQL_DELETE_EMPLEADO = "UPDATE empleado set activo=0 WHERE id = ?;";
     private static String SQL_INSERT_EMPLEADO = "INSERT INTO empleado (codigo_empleado, nombres, apellido_pat, apellido_mat, id_departamento, correo, fecha_nacimiento, salario) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
@@ -35,7 +47,7 @@ public class EmpleadoDao{
     public List<Empleado> obtenerEmpleados() throws SQLException, ClassNotFoundException {
         List<Empleado> empleados = new ArrayList<>();
         PreparedStatement preparedStatement = MySQLConnection.getConnection()
-                                                .prepareStatement(SQL_GET_ALL_EMPLEADOS);
+                .prepareStatement(SQL_GET_ALL_EMPLEADOS);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             empleados.add(mapResultSetToEmpleado(resultSet));
@@ -43,20 +55,29 @@ public class EmpleadoDao{
         return empleados;
     }
 
+
+    public List<EmpleadoEntity> obtenerEmpleadosJPA () {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("devUnit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        var empleados = entityManager.createQuery(SQL_GET_ALL_EMPLEADOS_JPQL, EmpleadoEntity.class).getResultList();
+        return empleados;
+    }
+
+
     public void editarEmpleado (Empleado empleado) throws SQLException, ClassNotFoundException {
         //TODO: Implementar la edición de un empleado
     }
 
     public void eliminarEmpleado(int id) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = MySQLConnection.getConnection()
-                                                .prepareStatement(SQL_DELETE_EMPLEADO);
+                .prepareStatement(SQL_DELETE_EMPLEADO);
         preparedStatement.setInt(1, id);
         preparedStatement.executeUpdate();
     }
 
     public void agregarEmpleado(Empleado empleado) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = MySQLConnection.getConnection()
-                                                .prepareStatement(SQL_INSERT_EMPLEADO);
+                .prepareStatement(SQL_INSERT_EMPLEADO);
         preparedStatement.setString(1, empleado.codigoEmpleado());
         preparedStatement.setString(2, empleado.nombres());
         preparedStatement.setString(3, empleado.apellidoPat());

@@ -2,24 +2,30 @@ package com.ez.sisemp.empleado.business;
 
 import com.ez.sisemp.empleado.dao.EmpleadoDao;
 import com.ez.sisemp.empleado.dao.EmpleadoDashboardDao;
+import com.ez.sisemp.empleado.entity.EmpleadoEntity;
 import com.ez.sisemp.empleado.exception.EmailAlreadyInUseException;
 import com.ez.sisemp.empleado.exception.EmpleadosNotFoundException;
 import com.ez.sisemp.empleado.model.Empleado;
 import com.ez.sisemp.empleado.model.EmpleadoDashboard;
+import com.ez.sisemp.parametro.dao.ParametroDao;
+import com.ez.sisemp.shared.utils.EdadUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmpleadoBusiness {
 
     private final EmpleadoDao empleadoDao;
     private final EmpleadoDashboardDao empleadoDashboardDao;
+    private final ParametroDao parametroDao;
 
     public EmpleadoBusiness(){
         this.empleadoDao = new EmpleadoDao();
         this.empleadoDashboardDao = new EmpleadoDashboardDao();
+        this.parametroDao = new ParametroDao();
     }
 
     public void registrarEmpleado(Empleado empleado) throws SQLException, ClassNotFoundException {
@@ -42,6 +48,38 @@ public class EmpleadoBusiness {
             throw new EmpleadosNotFoundException("No se encontraron empleados");
         }
         return empleadoDao.obtenerEmpleados();
+    }
+
+    public List<Empleado> obtenerEmpleadosJpa() {
+        var empleados = empleadoDao.obtenerEmpleadosJPA();
+        if(empleados.isEmpty()){
+            throw new EmpleadosNotFoundException("No se encontraron empleados");
+        }
+        var empleadosToReturn = new ArrayList<Empleado>();
+        empleados.forEach(
+                e -> {
+                    var empleadoRecord = mapToRecord(e);
+                    empleadosToReturn.add(empleadoRecord);
+                }
+        );
+        return empleadosToReturn;
+    }
+
+    private Empleado mapToRecord(EmpleadoEntity e) {
+        var departamento = parametroDao.getById(e.getIdDepartamento());
+        return new Empleado(
+                Math.toIntExact(e.getId()),
+                e.getCodigoEmpleado(),
+                e.getNombres(),
+                e.getApellidoPat(),
+                e.getApellidoMat(),
+                e.getIdDepartamento(),
+                departamento.getNombre(),
+                e.getCorreo(),
+                EdadUtils.calcularEdad(e.getFechaNacimiento()),
+                e.getSalario(),
+                e.getFechaNacimiento()
+        );
     }
 
     public EmpleadoDashboard obtenerDatosDashboard() throws SQLException, ClassNotFoundException {

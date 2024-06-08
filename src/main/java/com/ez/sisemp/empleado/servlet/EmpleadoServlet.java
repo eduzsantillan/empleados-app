@@ -28,7 +28,8 @@ public class EmpleadoServlet extends HttpServlet {
         try {
             EmpleadoDashboard dashboard = business.obtenerDatosDashboard();
             request.setAttribute("dashboard", dashboard);
-            List<Empleado> empleados = business.obtenerEmpleados();
+            //List<Empleado> empleados = business.obtenerEmpleados();
+            var empleados = business.obtenerEmpleadosJpa();
             request.setAttribute("empleados", empleados);
             request.getRequestDispatcher(EMPLEADO_JSP).forward(request, response);
         } catch (Exception e) {
