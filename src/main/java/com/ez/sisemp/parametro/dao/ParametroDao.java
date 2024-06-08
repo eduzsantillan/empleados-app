@@ -6,6 +6,7 @@ import com.ez.sisemp.parametro.model.Departamento;
 import com.ez.sisemp.shared.config.MySQLConnection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,4 +49,5 @@ public class ParametroDao {
     public DepartamentoEntity getById (Integer departamentoId) {
         return entityManager.find(DepartamentoEntity.class, departamentoId);
     }
+
 }
